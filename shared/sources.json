@@ -28,6 +28,71 @@
     "interval": 1800000,
     "title": "Politics"
   },
+  "reuters": {
+    "redirect": "reuters-world",
+    "name": "Reuters",
+    "column": "world",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 300000,
+    "title": "World"
+  },
+  "reuters-world": {
+    "name": "Reuters",
+    "column": "world",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 300000,
+    "title": "World"
+  },
+  "reuters-business": {
+    "name": "Reuters",
+    "column": "finance",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Business"
+  },
+  "reuters-technology": {
+    "name": "Reuters",
+    "column": "tech",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Technology"
+  },
+  "reuters-markets": {
+    "name": "Reuters",
+    "column": "finance",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Markets"
+  },
+  "reuters-politics": {
+    "name": "Reuters",
+    "column": "world",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Politics"
+  },
+  "reuters-sports": {
+    "name": "Reuters",
+    "column": "sports",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Sports"
+  },
+  "reuters-entertainment": {
+    "name": "Reuters",
+    "column": "entertainment",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "Entertainment"
+  },
   "v2ex": {
     "redirect": "v2ex-share",
     "name": "V2EX",
@@ -519,5 +584,54 @@
     "home": "https://store.steampowered.com",
     "color": "blue",
     "interval": 600000
+  },
+  "espn": {
+    "redirect": "espn-news",
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 300000,
+    "title": "Sports News"
+  },
+  "espn-news": {
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 300000,
+    "title": "Sports News"
+  },
+  "espn-nfl": {
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "NFL"
+  },
+  "espn-nba": {
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "NBA"
+  },
+  "espn-mlb": {
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "MLB"
+  },
+  "espn-soccer": {
+    "name": "ESPN",
+    "column": "sports",
+    "home": "https://www.espn.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "Soccer"
   }
 }

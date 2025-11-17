@@ -31,6 +31,43 @@ export const originSources = {
       },
     },
   },
+  "reuters": {
+    name: "Reuters",
+    color: "orange",
+    home: "https://www.reuters.com",
+    column: "world",
+    interval: Time.Common,
+    sub: {
+      world: {
+        title: "World",
+        interval: Time.Fast,
+      },
+      business: {
+        title: "Business",
+        column: "finance",
+      },
+      technology: {
+        title: "Technology",
+        column: "tech",
+      },
+      markets: {
+        title: "Markets",
+        column: "finance",
+      },
+      politics: {
+        title: "Politics",
+        column: "world",
+      },
+      sports: {
+        title: "Sports",
+        column: "sports",
+      },
+      entertainment: {
+        title: "Entertainment",
+        column: "entertainment",
+      },
+    },
+  },
   "v2ex": {
     name: "V2EX",
     color: "slate",
@@ -446,6 +483,31 @@ export const originSources = {
     color: "blue",
     type: "hottest",
     home: "https://store.steampowered.com",
+  },
+  "espn": {
+    name: "ESPN",
+    color: "red",
+    column: "sports",
+    home: "https://www.espn.com",
+    interval: Time.Common,
+    sub: {
+      news: {
+        title: "Sports News",
+        interval: Time.Fast,
+      },
+      nfl: {
+        title: "NFL",
+      },
+      nba: {
+        title: "NBA",
+      },
+      mlb: {
+        title: "MLB",
+      },
+      soccer: {
+        title: "Soccer",
+      },
+    },
   },
 } as const satisfies Record<string, OriginSource>
 

@@ -2,6 +2,13 @@
   "bloomberg-markets": "Bloomberg-Markets",
   "bloomberg-technology": "Bloomberg-Technology",
   "bloomberg-politics": "Bloomberg-Politics",
+  "reuters-world": "Reuters-World",
+  "reuters-business": "Reuters-Business",
+  "reuters-technology": "Reuters-Technology",
+  "reuters-markets": "Reuters-Markets",
+  "reuters-politics": "Reuters-Politics",
+  "reuters-sports": "Reuters-Sports",
+  "reuters-entertainment": "Reuters-Entertainment",
   "v2ex-share": "V2EX-zuixinfenxiang",
   "zhihu": "zhihu",
   "weibo": "weibo-shishiresou",
@@ -46,5 +53,10 @@
   "chongbuluo-latest": "chongbuluo-zuixin",
   "chongbuluo-hot": "chongbuluo-zuire",
   "douban": "douban-remendianying",
-  "steam": "Steam-zaixianrenshu"
+  "steam": "Steam-zaixianrenshu",
+  "espn-news": "ESPN-Sports News",
+  "espn-nfl": "ESPN-NFL",
+  "espn-nba": "ESPN-NBA",
+  "espn-mlb": "ESPN-MLB",
+  "espn-soccer": "ESPN-Soccer"
 }
