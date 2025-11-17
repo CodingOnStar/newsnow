@@ -1,4 +1,33 @@
 {
+  "bloomberg": {
+    "redirect": "bloomberg-markets",
+    "name": "Bloomberg",
+    "home": "https://www.bloomberg.com",
+    "color": "slate",
+    "interval": 300000,
+    "title": "Markets"
+  },
+  "bloomberg-markets": {
+    "name": "Bloomberg",
+    "home": "https://www.bloomberg.com",
+    "color": "slate",
+    "interval": 300000,
+    "title": "Markets"
+  },
+  "bloomberg-technology": {
+    "name": "Bloomberg",
+    "home": "https://www.bloomberg.com",
+    "color": "slate",
+    "interval": 1800000,
+    "title": "Technology"
+  },
+  "bloomberg-politics": {
+    "name": "Bloomberg",
+    "home": "https://www.bloomberg.com",
+    "color": "slate",
+    "interval": 1800000,
+    "title": "Politics"
+  },
   "v2ex": {
     "redirect": "v2ex-share",
     "name": "V2EX",
@@ -50,23 +79,6 @@
     "home": "https://coolapk.com",
     "color": "green",
     "interval": 600000
-  },
-  "mktnews": {
-    "redirect": "mktnews-flash",
-    "name": "MKTNews",
-    "column": "finance",
-    "home": "https://mktnews.net",
-    "color": "indigo",
-    "interval": 120000,
-    "title": "快讯"
-  },
-  "mktnews-flash": {
-    "name": "MKTNews",
-    "column": "finance",
-    "home": "https://mktnews.net",
-    "color": "indigo",
-    "interval": 120000,
-    "title": "快讯"
   },
   "wallstreetcn": {
     "redirect": "wallstreetcn-quick",
@@ -272,6 +284,23 @@
     "home": "https://www.gelonghui.com",
     "color": "blue",
     "interval": 120000
+  },
+  "mktnews": {
+    "redirect": "mktnews-flash",
+    "name": "MKTNews",
+    "column": "finance",
+    "home": "https://mktnews.net",
+    "color": "indigo",
+    "interval": 120000,
+    "title": "快讯"
+  },
+  "mktnews-flash": {
+    "name": "MKTNews",
+    "column": "finance",
+    "home": "https://mktnews.net",
+    "color": "indigo",
+    "interval": 120000,
+    "title": "快讯"
   },
   "fastbull": {
     "redirect": "fastbull-express",

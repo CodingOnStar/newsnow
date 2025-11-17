@@ -4,8 +4,11 @@ import type { RSSInfo } from "../types"
 export async function rss2json(url: string): Promise<RSSInfo | undefined> {
   if (!/^https?:\/\/[^\s$.?#].\S*/i.test(url)) return
 
-  const data = await myFetch(url)
+  let data = await myFetch(url)
 
+  if (data instanceof Blob) {
+    data = await data.text()
+  }
   const xml = new XMLParser({
     attributeNamePrefix: "",
     textNodeName: "$text",

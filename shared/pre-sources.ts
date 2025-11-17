@@ -13,6 +13,24 @@ const Time = {
 }
 
 export const originSources = {
+  "bloomberg": {
+    name: "Bloomberg",
+    color: "slate",
+    home: "https://www.bloomberg.com",
+    interval: Time.Common,
+    sub: {
+      markets: {
+        title: "Markets",
+        interval: Time.Fast,
+      },
+      technology: {
+        title: "Technology",
+      },
+      politics: {
+        title: "Politics",
+      },
+    },
+  },
   "v2ex": {
     name: "V2EX",
     color: "slate",
@@ -57,18 +75,6 @@ export const originSources = {
     title: "今日最热",
     home: "https://coolapk.com",
   },
-  "mktnews": {
-    name: "MKTNews",
-    column: "finance",
-    home: "https://mktnews.net",
-    color: "indigo",
-    interval: Time.Realtime,
-    sub: {
-      flash: {
-        title: "快讯",
-      },
-    },
-  },
   "wallstreetcn": {
     name: "华尔街见闻",
     color: "blue",
@@ -98,10 +104,10 @@ export const originSources = {
     // cloudflare pages cannot access
     disable: "cf",
     home: "https://36kr.com",
-    column: "tech",
     sub: {
       quick: {
         title: "快讯",
+        column: "tech",
       },
     },
   },
@@ -224,6 +230,18 @@ export const originSources = {
     type: "realtime",
     interval: Time.Realtime,
     home: "https://www.gelonghui.com",
+  },
+  "mktnews": {
+    name: "MKTNews",
+    column: "finance",
+    home: "https://mktnews.net",
+    color: "indigo",
+    interval: Time.Realtime,
+    sub: {
+      flash: {
+        title: "快讯",
+      },
+    },
   },
   "fastbull": {
     name: "法布财经",
