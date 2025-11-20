@@ -509,6 +509,33 @@ export const originSources = {
       },
     },
   },
+  "economist": {
+    name: "The Economist",
+    color: "red",
+    column: "finance",
+    home: "https://www.economist.com",
+    interval: Time.Common,
+    sub: {
+      world: {
+        title: "World",
+        column: "world",
+      },
+      business: {
+        title: "Business",
+      },
+      finance: {
+        title: "Finance & Economics",
+      },
+      science: {
+        title: "Science & Technology",
+        column: "tech",
+      },
+      culture: {
+        title: "Culture",
+        column: "entertainment",
+      },
+    },
+  },
 } as const satisfies Record<string, OriginSource>
 
 export function genSources() {

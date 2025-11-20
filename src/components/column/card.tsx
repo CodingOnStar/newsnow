@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useInView } from "framer-motion"
 import { useWindowSize } from "react-use"
 import { forwardRef, useImperativeHandle } from "react"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
+import { AISummary } from "../common/ai-summary"
 import { safeParseString } from "~/utils"
 
 export interface ItemsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,35 +21,37 @@ interface NewsCardProps {
   setHandleRef?: (ref: HTMLElement | null) => void
 }
 
-export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(({ id, isDragging, setHandleRef, style, ...props }, dndRef) => {
-  const ref = useRef<HTMLDivElement>(null)
+export const CardWrapper = forwardRef<HTMLElement, ItemsProps>(
+  ({ id, isDragging, setHandleRef, style, ...props }, dndRef) => {
+    const ref = useRef<HTMLDivElement>(null)
 
-  const inView = useInView(ref, {
-    once: true,
-  })
+    const inView = useInView(ref, {
+      once: true,
+    })
 
-  useImperativeHandle(dndRef, () => ref.current! as HTMLDivElement)
+    useImperativeHandle(dndRef, () => ref.current! as HTMLDivElement)
 
-  return (
-    <div
-      ref={ref}
-      className={$(
-        "flex flex-col h-500px rounded-2xl p-4 cursor-default",
-        // "backdrop-blur-5",
-        "transition-opacity-300",
-        isDragging && "op-50",
-        `bg-${sources[id].color}-500 dark:bg-${sources[id].color} bg-op-40!`,
-      )}
-      style={{
-        transformOrigin: "50% 50%",
-        ...style,
-      }}
-      {...props}
-    >
-      {inView && <NewsCard id={id} setHandleRef={setHandleRef} />}
-    </div>
-  )
-})
+    return (
+      <div
+        ref={ref}
+        className={$(
+          "flex flex-col h-500px rounded-2xl p-4 cursor-default",
+          // "backdrop-blur-5",
+          "transition-opacity-300",
+          isDragging && "op-50",
+          `bg-${sources[id].color}-500 dark:bg-${sources[id].color} bg-op-40!`,
+        )}
+        style={{
+          transformOrigin: "50% 50%",
+          ...style,
+        }}
+        {...props}
+      >
+        {inView && <NewsCard id={id} setHandleRef={setHandleRef} />}
+      </div>
+    )
+  },
+)
 
 function NewsCard({ id, setHandleRef }: NewsCardProps) {
   const { refresh } = useRefetch()
@@ -75,9 +78,16 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 
       function diff() {
         try {
-          if (response.items && sources[id].type === "hottest" && cacheSources.has(id)) {
+          if (
+            response.items
+            && sources[id].type === "hottest"
+            && cacheSources.has(id)
+          ) {
             response.items.forEach((item, i) => {
-              const o = cacheSources.get(id)!.items.findIndex(k => k.id === item.id)
+              const o = cacheSources
+                .get(id)!
+                .items
+                .findIndex(k => k.id === item.id)
               item.extra = {
                 ...item?.extra,
                 diff: o === -1 ? undefined : o - i,
@@ -119,33 +129,51 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
           />
           <span className="flex flex-col">
             <span className="flex items-center gap-2">
-              <span
-                className="text-xl font-bold"
-                title={sources[id].desc}
-              >
+              <span className="text-xl font-bold" title={sources[id].desc}>
                 {sources[id].name}
               </span>
-              {sources[id]?.title && <span className={$("text-sm", `color-${sources[id].color} bg-base op-80 bg-op-50! px-1 rounded`)}>{sources[id].title}</span>}
+              {sources[id]?.title && (
+                <span
+                  className={$(
+                    "text-sm",
+                    `color-${sources[id].color} bg-base op-80 bg-op-50! px-1 rounded`,
+                  )}
+                >
+                  {sources[id].title}
+                </span>
+              )}
             </span>
-            <span className="text-xs op-70"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
+            <span className="text-xs op-70">
+              <UpdatedTime isError={isError} updatedTime={data?.updatedTime} />
+            </span>
           </span>
         </div>
         <div className={$("flex gap-2 text-lg", `color-${sources[id].color}`)}>
           <button
             type="button"
-            className={$("btn i-ph:arrow-counter-clockwise-duotone", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
+            className={$(
+              "btn i-ph:arrow-counter-clockwise-duotone",
+              isFetching && "animate-spin i-ph:circle-dashed-duotone",
+            )}
             onClick={() => refresh(id)}
           />
           <button
             type="button"
-            className={$("btn", isFocused ? "i-ph:star-fill" : "i-ph:star-duotone")}
+            className={$(
+              "btn",
+              isFocused ? "i-ph:star-fill" : "i-ph:star-duotone",
+            )}
             onClick={toggleFocus}
           />
           {/* firefox cannot drag a button */}
           {setHandleRef && (
             <div
               ref={setHandleRef}
-              className={$("btn", "i-ph:dots-six-vertical-duotone", "cursor-grab")}
+              className={$(
+                "btn",
+                "i-ph:dots-six-vertical-duotone",
+                "cursor-grab",
+              )}
             />
           )}
         </div>
@@ -163,14 +191,27 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
         defer
       >
         <div className={$("transition-opacity-500", isFetching && "op-20")}>
-          {!!data?.items?.length && (sources[id].type === "hottest" ? <NewsListHot items={data.items} /> : <NewsListTimeLine items={data.items} />)}
+          {!!data?.items?.length
+          && (sources[id].type === "hottest"
+            ? (
+                <NewsListHot items={data.items} />
+              )
+            : (
+                <NewsListTimeLine items={data.items} />
+              ))}
         </div>
       </OverlayScrollbar>
     </>
   )
 }
 
-function UpdatedTime({ isError, updatedTime }: { updatedTime: any, isError: boolean }) {
+function UpdatedTime({
+  isError,
+  updatedTime,
+}: {
+  updatedTime: any
+  isError: boolean
+}) {
   const relativeTime = useRelativeTime(updatedTime ?? "")
   if (relativeTime) return `${relativeTime}更新`
   if (isError) return "获取失败"
@@ -189,12 +230,15 @@ function DiffNumber({ diff }: { diff: number }) {
 
   return (
     <AnimatePresence>
-      { shown && (
+      {shown && (
         <motion.span
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 0.5, y: -7 }}
           exit={{ opacity: 0, y: -15 }}
-          className={$("absolute left-0 text-xs", diff < 0 ? "text-green" : "text-red")}
+          className={$(
+            "absolute left-0 text-xs",
+            diff < 0 ? "text-green" : "text-red",
+          )}
         >
           {diff > 0 ? `+${diff}` : diff}
         </motion.span>
@@ -207,7 +251,10 @@ function ExtraInfo({ item }: { item: NewsItem }) {
     return <>{item.extra.info}</>
   }
   if (item?.extra?.icon) {
-    const { url, scale } = typeof item.extra.icon === "string" ? { url: item.extra.icon, scale: undefined } : item.extra.icon
+    const { url, scale }
+      = typeof item.extra.icon === "string"
+        ? { url: item.extra.icon, scale: undefined }
+        : item.extra.icon
     return (
       <img
         src={url}
@@ -215,7 +262,7 @@ function ExtraInfo({ item }: { item: NewsItem }) {
           transform: `scale(${scale ?? 1})`,
         }}
         className="h-4 inline mt--1"
-        onError={e => e.currentTarget.style.display = "none"}
+        onError={e => (e.currentTarget.style.display = "none")}
       />
     )
   }
@@ -230,29 +277,37 @@ function NewsListHot({ items }: { items: NewsItem[] }) {
   return (
     <ol className="flex flex-col gap-2">
       {items?.map((item, i) => (
-        <a
-          href={width < 768 ? item.mobileUrl || item.url : item.url}
-          target="_blank"
+        <li
           key={item.id}
-          title={item.extra?.hover}
           className={$(
-            "flex gap-2 items-center items-stretch relative cursor-pointer [&_*]:cursor-pointer transition-all",
-            "hover:bg-neutral-400/10 rounded-md pr-1 visited:(text-neutral-400)",
+            "flex gap-2 items-center items-stretch relative transition-all",
+            "hover:bg-neutral-400/10 rounded-md pr-1",
           )}
         >
-          <span className={$("bg-neutral-400/10 min-w-6 flex justify-center items-center rounded-md text-sm")}>
+          <a
+            href={width < 768 ? item.mobileUrl || item.url : item.url}
+            target="_blank"
+            title={item.extra?.hover}
+            className="absolute inset-0 z-0"
+          />
+          <span
+            className={$(
+              "bg-neutral-400/10 min-w-6 flex justify-center items-center rounded-md text-sm z-1 relative pointer-events-none",
+            )}
+          >
             {i + 1}
           </span>
           {!!item.extra?.diff && <DiffNumber diff={item.extra.diff} />}
-          <span className="self-start line-height-none">
-            <span className="mr-2 text-base">
-              {item.title}
-            </span>
+          <span className="self-start line-height-none z-1 relative pointer-events-none">
+            <span className="mr-2 text-base">{item.title}</span>
             <span className="text-xs text-neutral-400/80 truncate align-middle">
               <ExtraInfo item={item} />
             </span>
+            <span className="pointer-events-auto">
+              <AISummary url={item.url} />
+            </span>
           </span>
-        </a>
+        </li>
       ))}
     </ol>
   )
@@ -263,28 +318,36 @@ function NewsListTimeLine({ items }: { items: NewsItem[] }) {
   return (
     <ol className="border-s border-neutral-400/50 flex flex-col ml-1">
       {items?.map(item => (
-        <li key={`${item.id}-${item.pubDate || item?.extra?.date || ""}`} className="flex flex-col">
+        <li
+          key={`${item.id}-${item.pubDate || item?.extra?.date || ""}`}
+          className="flex flex-col"
+        >
           <span className="flex items-center gap-1 text-neutral-400/50 ml--1px">
             <span className="">-</span>
             <span className="text-xs text-neutral-400/80">
-              {(item.pubDate || item?.extra?.date) && <NewsUpdatedTime date={(item.pubDate || item?.extra?.date)!} />}
+              {(item.pubDate || item?.extra?.date) && (
+                <NewsUpdatedTime date={(item.pubDate || item?.extra?.date)!} />
+              )}
             </span>
             <span className="text-xs text-neutral-400/80">
               <ExtraInfo item={item} />
             </span>
           </span>
-          <a
-            className={$(
-              "ml-2 px-1 hover:bg-neutral-400/10 rounded-md visited:(text-neutral-400/80)",
-              "cursor-pointer [&_*]:cursor-pointer transition-all",
-            )}
-            href={width < 768 ? item.mobileUrl || item.url : item.url}
-            title={item.extra?.hover}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {item.title}
-          </a>
+          <div className="pl-1">
+            <a
+              className={$(
+                "hover:bg-neutral-400/10 rounded-md visited:(text-neutral-400/80)",
+                "cursor-pointer [&_*]:cursor-pointer transition-all",
+              )}
+              href={width < 768 ? item.mobileUrl || item.url : item.url}
+              title={item.extra?.hover}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.title}
+            </a>
+            <AISummary url={item.url} />
+          </div>
         </li>
       ))}
     </ol>

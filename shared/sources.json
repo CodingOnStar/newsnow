@@ -633,5 +633,54 @@
     "color": "red",
     "interval": 1800000,
     "title": "Soccer"
+  },
+  "economist": {
+    "redirect": "economist-world",
+    "name": "The Economist",
+    "column": "world",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "World"
+  },
+  "economist-world": {
+    "name": "The Economist",
+    "column": "world",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "World"
+  },
+  "economist-business": {
+    "name": "The Economist",
+    "column": "finance",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "Business"
+  },
+  "economist-finance": {
+    "name": "The Economist",
+    "column": "finance",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "Finance & Economics"
+  },
+  "economist-science": {
+    "name": "The Economist",
+    "column": "tech",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "Science & Technology"
+  },
+  "economist-culture": {
+    "name": "The Economist",
+    "column": "entertainment",
+    "home": "https://www.economist.com",
+    "color": "red",
+    "interval": 1800000,
+    "title": "Culture"
   }
 }

@@ -58,5 +58,10 @@
   "espn-nfl": "ESPN-NFL",
   "espn-nba": "ESPN-NBA",
   "espn-mlb": "ESPN-MLB",
-  "espn-soccer": "ESPN-Soccer"
+  "espn-soccer": "ESPN-Soccer",
+  "economist-world": "The Economist-World",
+  "economist-business": "The Economist-Business",
+  "economist-finance": "The Economist-Finance & Economics",
+  "economist-science": "The Economist-Science & Technology",
+  "economist-culture": "The Economist-Culture"
 }
