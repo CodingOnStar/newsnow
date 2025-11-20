@@ -1,6 +1,8 @@
 import process from "node:process"
 import { load } from "cheerio"
 import { myFetch } from "../utils/fetch"
+import { md5 } from "../utils/crypto"
+import { getSummaryCache } from "../database/cache"
 
 export default defineEventHandler(async (event) => {
   const { url } = await readBody(event)
@@ -9,6 +11,15 @@ export default defineEventHandler(async (event) => {
       statusCode: 400,
       statusMessage: "Missing URL",
     })
+  }
+
+  const urlHash = await md5(url)
+  const cache = await getSummaryCache()
+  if (cache) {
+    const cached = await cache.get(urlHash)
+    if (cached) {
+      return cached
+    }
   }
 
   try {
@@ -70,7 +81,7 @@ export default defineEventHandler(async (event) => {
     JSON 格式要求：
     {
       "tldr": "一句话总结全文核心内容（50字以内）",
-      "points": ["关键点1", "关键点2", "关键点3"]
+      "points": ["关键点1", "关键点2", "关键点3", "关键点4", "关键点5"]
     }
     
     文章内容：
@@ -98,7 +109,11 @@ export default defineEventHandler(async (event) => {
     })
 
     const content = aiResponse.choices[0].message.content
-    return JSON.parse(content)
+    const result = JSON.parse(content)
+    if (cache) {
+      await cache.set(urlHash, result)
+    }
+    return result
   } catch (e: any) {
     console.error("Summary generation failed:", e)
     throw createError({

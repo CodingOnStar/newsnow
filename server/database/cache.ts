@@ -71,6 +71,40 @@ export class Cache {
   }
 }
 
+export class SummaryCache {
+  private db
+  constructor(db: Database) {
+    this.db = db
+  }
+
+  async init() {
+    await this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS summary_cache (
+        id TEXT PRIMARY KEY,
+        updated INTEGER,
+        data TEXT
+      );
+    `).run()
+    logger.success(`init summary_cache table`)
+  }
+
+  async set(key: string, value: any) {
+    const now = Date.now()
+    await this.db.prepare(
+      `INSERT OR REPLACE INTO summary_cache (id, data, updated) VALUES (?, ?, ?)`,
+    ).run(key, JSON.stringify(value), now)
+    logger.success(`set summary cache`)
+  }
+
+  async get(key: string) {
+    const row = (await this.db.prepare(`SELECT data FROM summary_cache WHERE id = ?`).get(key)) as { data: string } | undefined
+    if (row) {
+      logger.success(`hit summary cache`)
+      return JSON.parse(row.data)
+    }
+  }
+}
+
 export async function getCacheTable() {
   try {
     const db = useDatabase()
@@ -81,5 +115,17 @@ export async function getCacheTable() {
     return cacheTable
   } catch (e) {
     logger.error("failed to init database ", e)
+  }
+}
+
+export async function getSummaryCache() {
+  try {
+    const db = useDatabase()
+    if (process.env.ENABLE_CACHE === "false") return
+    const cache = new SummaryCache(db)
+    if (process.env.INIT_TABLE !== "false") await cache.init()
+    return cache
+  } catch (e) {
+    logger.error("failed to init summary database ", e)
   }
 }

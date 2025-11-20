@@ -1,6 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion"
-import { useRef, useState } from "react"
-import { useClickAway } from "react-use"
+import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { myFetch } from "~/utils"
 
 export interface SummaryProps {
@@ -10,15 +9,37 @@ export interface SummaryProps {
 export function AISummary({ url }: SummaryProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [buttonRect, setButtonRect] = useState<DOMRect | null>(null)
   const [summary, setSummary] = useState<{
     tldr: string
     points: string[]
   } | null>(null)
 
-  const ref = useRef<HTMLSpanElement>(null)
-  useClickAway(ref, () => {
-    if (isOpen) setIsOpen(false)
-  })
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node
+      if (
+        buttonRef.current?.contains(target)
+        || contentRef.current?.contains(target)
+      ) {
+        return
+      }
+      setIsOpen(false)
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
+    }
+  }, [isOpen])
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -29,6 +50,9 @@ export function AISummary({ url }: SummaryProps) {
       return
     }
 
+    if (buttonRef.current) {
+      setButtonRect(buttonRef.current.getBoundingClientRect())
+    }
     setIsOpen(true)
 
     if (!summary && !isLoading) {
@@ -50,12 +74,30 @@ export function AISummary({ url }: SummaryProps) {
     }
   }
 
+  const getPositionStyle = () => {
+    if (!buttonRect) return {}
+
+    const isMobile = window.innerWidth < 768
+    const width = isMobile ? 256 : 320
+    const padding = 16
+
+    let left = buttonRect.left
+    if (left + width > window.innerWidth - padding) {
+      left = window.innerWidth - width - padding
+    }
+    if (left < padding) left = padding
+
+    return {
+      top: buttonRect.bottom + 8,
+      left,
+      width,
+    }
+  }
+
   return (
-    <span
-      ref={ref}
-      className="inline-flex items-center ml-2 align-middle relative cursor-pointer"
-    >
+    <span className="inline-flex items-center ml-2 align-middle relative cursor-pointer">
       <button
+        ref={buttonRef}
         type="button"
         onClick={handleToggle}
         className={$(
@@ -73,43 +115,41 @@ export function AISummary({ url }: SummaryProps) {
         />
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0, y: -10 }}
-            animate={{ opacity: 1, height: "auto", y: 0 }}
-            exit={{ opacity: 0, height: 0, y: -10 }}
-            className="absolute left-0 top-6 z-10 w-64 md:w-80"
-            onClick={e => e.preventDefault()} // Prevent link click when clicking inside card
-          >
-            <div className="bg-base/90 backdrop-blur-md border border-purple-500/20 rounded-xl p-3 shadow-lg text-sm">
-              {isLoading
+      {isOpen && buttonRect && createPortal(
+        <div
+          ref={contentRef}
+          className="fixed z-[9999]"
+          style={getPositionStyle()}
+          onClick={e => e.preventDefault()} // Prevent link click
+        >
+          <div className="bg-base/90 backdrop-blur-md border border-purple-500/20 rounded-xl p-3 shadow-lg text-sm">
+            {isLoading
+              ? (
+                  <div className="flex items-center gap-2 text-purple-500/80">
+                    <span className="i-ph:spinner animate-spin" />
+                    <span>正在生成摘要...</span>
+                  </div>
+                )
+              : summary
                 ? (
-                    <div className="flex items-center gap-2 text-purple-500/80">
-                      <span className="i-ph:spinner animate-spin" />
-                      <span>正在生成摘要...</span>
+                    <div className="flex flex-col gap-2">
+                      <div className="font-bold text-purple-600 dark:text-purple-400">
+                        {summary.tldr}
+                      </div>
+                      <ul className="list-disc list-outside pl-4 space-y-1 text-xs opacity-80">
+                        {summary.points.map(point => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
                     </div>
                   )
-                : summary
-                  ? (
-                      <div className="flex flex-col gap-2">
-                        <div className="font-bold text-purple-600 dark:text-purple-400">
-                          {summary.tldr}
-                        </div>
-                        <ul className="list-disc list-outside pl-4 space-y-1 text-xs opacity-80">
-                          {summary.points.map(point => (
-                            <li key={point}>{point}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )
-                  : (
-                      <div className="text-red-500 text-xs">生成失败，请重试</div>
-                    )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                : (
+                    <div className="text-red-500 text-xs">生成失败，请重试</div>
+                  )}
+          </div>
+        </div>,
+        document.body,
+      )}
     </span>
   )
 }
